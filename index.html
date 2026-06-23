@@ -97,7 +97,7 @@
                         <th class="border px-3 py-2 text-center">2023积分</th>
                         <th class="border px-3 py-2 text-center">2024积分</th>
                         <th class="border px-3 py-2 text-center">2025积分</th>
-                        <th class="border px-3 py-2 text-center">23-25总分涨幅</th>
+                        <th class="border px-3 py-2 text-center">25对比24涨跌幅</th>
                         <th class="border px-3 py-2 text-center">走势</th>
                     </tr>
                 </thead>
@@ -235,17 +235,18 @@
             renderYearCompareChart(currData);
         }
 
-        // 渲染积分表格，计算23-25涨幅
+        // 渲染积分表格：计算25对比24涨跌幅
         function renderTable(dataList){
             const tbody = document.getElementById('scoreTableBody');
             tbody.innerHTML = '';
             dataList.forEach(item=>{
-                const upRate = (item.y2025 - item.y2023).toFixed(2);
+                // 改为2025减2024，只计算相邻一年差值
+                const diff24to25 = (item.y2025 - item.y2024).toFixed(2);
                 let rateClass, trendText;
-                if(upRate > 0){
+                if(diff24to25 > 0){
                     rateClass = 'text-red-600';
                     trendText = '↑上涨';
-                }else if(upRate < 0){
+                }else if(diff24to25 < 0){
                     rateClass = 'text-green-600';
                     trendText = '↓下跌';
                 }else{
@@ -258,7 +259,7 @@
                     <td class="border px-3 py-2 text-center">${item.y2023}</td>
                     <td class="border px-3 py-2 text-center">${item.y2024}</td>
                     <td class="border px-3 py-2 text-center font-medium">${item.y2025}</td>
-                    <td class="border px-3 py-2 text-center ${rateClass}">${upRate}分</td>
+                    <td class="border px-3 py-2 text-center ${rateClass}">${diff24to25}分</td>
                     <td class="border px-3 py-2 text-center">${trendText}</td>
                 `;
                 tbody.appendChild(tr);
@@ -288,7 +289,7 @@
             document.getElementById('minScoreText').innerText = `${minItem.score}分 | ${minItem.name}`;
         }
 
-        // 各校三年积分折线图（移除街道分组tooltip逻辑）
+        // 各校三年积分折线图（原生tooltip，无街道分组）
         function renderTrendChart(currentStreetKey){
             const dom = document.getElementById('trendChart');
             if(trendChartIns) trendChartIns.dispose();
