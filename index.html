@@ -19,7 +19,7 @@
         <div class="container mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
             <h1 class="text-2xl font-bold">龙岗区初一录取积分可视化平台（2023-2025真实数据）</h1>
             <div class="flex gap-4 items-center">
-                <span class="text-sm opacity-90">数据源：23-25年官方录取积分表 | 覆盖6大街道</span>
+                <span class="text-sm opacity-90">数据源：23-25年官方录取积分表</span>
                 <a href="#" class="bg-white text-blue-600 px-3 py-1 rounded text-sm font-medium">数据说明</a>
             </div>
         </div>
@@ -55,7 +55,7 @@
             </div>
         </section>
 
-        <!-- 核心指标卡片 -->
+        <!-- 核心指标卡片（已修改标题） -->
         <section class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
             <div class="bg-white p-4 rounded-lg card-shadow">
                 <p class="text-gray-500 text-sm">当前街道中学总数</p>
@@ -67,11 +67,11 @@
             </div>
             <div class="bg-white p-4 rounded-lg card-shadow">
                 <p class="text-gray-500 text-sm">2025年街道最高积分</p>
-                <h2 id="maxScore" class="text-3xl font-bold text-orange-600 mt-2">0</h2>
+                <h2 id="maxScoreText" class="text-xl font-bold text-orange-600 mt-2">0分 --</h2>
             </div>
             <div class="bg-white p-4 rounded-lg card-shadow">
-                <p class="text-gray-500 text-sm">三年涨幅最大学校</p>
-                <h2 id="maxUp" class="text-xl font-bold text-red-600 mt-2">--</h2>
+                <p class="text-gray-500 text-sm">2025年街道最低积分</p>
+                <h2 id="minScoreText" class="text-xl font-bold text-green-600 mt-2">0分 --</h2>
             </div>
         </section>
 
@@ -113,92 +113,102 @@
     <script>
         // ========== 图片提取真实数据源（按街道分类）==========
         const streetAllData = {
-            longcheng: [
-                {name:"龙城初级中学",y2023:90.65,y2024:91.1,y2025:93.75},
-                {name:"深圳中学龙岗学校",y2023:100.2,y2024:100.3,y2025:101.1},
-                {name:"龙高创新学校",y2023:66.6,y2024:69.5,y2025:70},
-                {name:"龙岗实验学校",y2023:70,y2024:70,y2025:75.6},
-                {name:"新知学校",y2023:69.15,y2024:70,y2025:75.2},
-                {name:"道远学校",y2023:89.1,y2024:91.2,y2025:70},
-                {name:"新亚洲学校",y2023:75.45,y2024:75,y2025:90.65},
-                {name:"平安里学校",y2023:77,y2024:88.4,y2025:93.55},
-                {name:"兰著学校",y2023:83.45,y2024:86.2,y2025:84.2},
-                {name:"龙岗外国语",y2023:102.1,y2024:102.8,y2025:103.55},
-                {name:"星河学校",y2023:75,y2024:69.65,y2025:75},
-                {name:"致美学校",y2023:69.85,y2024:75,y2025:69.45},
-                {name:"上海外国语学校",y2023:75,y2024:75,y2025:90},
-                {name:"天成学校",y2023:66.95,y2024:69.6,y2025:75},
-                {name:"天誉实验学校",y2023:75.45,y2024:67.05,y2025:91.65},
-                {name:"华南师范大运学校",y2023:75,y2024:75.6,y2025:91.05}
-            ],
-            longgang: [
-                {name:"龙岗中学",y2023:65.2,y2024:65.7,y2025:66.8},
-                {name:"南联学校",y2023:68.35,y2024:66.7,y2025:66.45},
-                {name:"新梓学校",y2023:66.05,y2024:68.1,y2025:70},
-                {name:"龙园学校",y2023:68.45,y2024:68.35,y2025:69.9},
-                {name:"仙田外国语学校",y2023:67.6,y2024:75,y2025:89.35},
-                {name:"教科院附属创星学校",y2023:68,y2024:68.65,y2025:84.05},
-                {name:"未来双语学校",y2023:66.15,y2024:70,y2025:70},
-                {name:"行知学校",y2023:75,y2024:75,y2025:75},
-                {name:"宝龙科技城实验学校",y2023:95,y2024:100.4,y2025:102.5},
-                {name:"宝龙外国语学校",y2023:69,y2024:79.1,y2025:93},
-                {name:"同心实验学校",y2023:85.8,y2024:86.1,y2025:89.8},
-                {name:"同乐主力学校",y2023:65.05,y2024:66.4,y2025:67.8},
-                {name:"龙岗中心学校",y2023:86.1,y2024:81.7,y2025:86},
-                {name:"深高级龙岗学校",y2023:68.45,y2024:78,y2025:95.05},
-                {name:"宝荷学校",y2023:65.15,y2024:68.65,y2025:87.25}
-            ],
-            bantian: [
-                {name:"云和学校",y2023:69.05,y2024:70,y2025:70},
-                {name:"深圳实验坂田校区",y2023:103.15,y2024:104.3,y2025:104.95},
-                {name:"深圳大学附属坂田学校",y2023:68.7,y2024:70, y2025:75},
-                {name:"科技城外国语",y2023:101.65,y2024:101.7,y2025:104},
-                {name:"坂田实验",y2023:67.75,y2024:68,y2025:70},
-                {name:"五和实验学校",y2023:69.55,y2024:64.9,y2025:70},
-                {name:"扬美实验",y2023:65.6,y2024:66.5,y2025:67.05},
-                {name:"广东实验深圳学校",y2023:88.7,y2024:92.25,y2025:98.6},
-                {name:"云端学校",y2023:91.75,y2024:91.75,y2025:91.75}
-            ],
-            henggang: [
-                {name:"横岗中学",y2023:68.3,y2024:70.5,y2025:75},
-                {name:"六约学校",y2023:69.35,y2024:68.2,y2025:68.1},
-                {name:"横岗中心学校",y2023:66.9,y2024:68.6,y2025:68.6},
-                {name:"梧桐学校",y2023:85.35,y2024:88.6,y2025:100},
-                {name:"横岗外国语",y2023:65.95,y2024:67.95,y2025:68},
-                {name:"园山实验",y2023:66.9,y2024:69,y2025:69.25},
-                {name:"北理莫斯科园山学校原保安学校",y2023:67.7,y2024:69.3,y2025:84.15},
-                {name:"盛义九年一贯制学校",y2023:68.5,y2024:68.5,y2025:68.5}
-            ],
-            pinghu: [
-                {name:"平湖中学",y2023:65.25,y2024:66.2,y2025:67.05},
-                {name:"信德学校",y2023:84.3,y2024:81.05,y2025:84.3},
-                {name:"平湖中心学校",y2023:63.6,y2024:67.6,y2025:68.5},
-                {name:"华南师范平湖学校",y2023:63.6,y2024:64.08,y2025:64.8},
-                {name:"平湖外国语学校",y2023:64.65,y2024:65.85,y2025:67.4},
-                {name:"崇真学校",y2023:64,y2024:70,y2025:70},
-                {name:"平湖第二实验",y2023:64.6,y2024:68.9,y2025:68.9},
-                {name:"深圳外国语龙岗学校",y2023:103.15,y2024:97.75,y2025:97.75}
-            ],
-            buji: [
-                {name:"布吉中学",y2023:67.15,y2024:67,y2025:67.5},
-                {name:"贤义外国语学校",y2023:104.55,y2024:105.9,y2025:107},
-                {name:"可园学校",y2023:90,y2024:100.2,y2025:103.55},
-                {name:"木棉湾学校",y2023:83.95,y2024:85.3,y2025:95},
-                {name:"文理学校",y2023:90.5,y2024:94.05,y2025:94.1},
-                {name:"龙岭公班",y2023:107.65,y2024:91.1,y2025:109.35},
-                {name:"怡翠实验学校",y2023:104.4,y2024:101,y2025:104.25},
-                {name:"甘李学校",y2023:66.9,y2024:67.4,y2025:67.45},
-                {name:"吉华实验学校",y2023:68.85,y2024:85,y2025:89.3}
-            ]
+            longcheng: {
+                name: "龙城街道",
+                list: [
+                    {name:"龙城初级中学",y2023:90.65,y2024:91.1,y2025:93.75},
+                    {name:"深圳中学龙岗学校",y2023:100.2,y2024:100.3,y2025:101.1},
+                    {name:"龙高创新学校",y2023:66.6,y2024:69.5,y2025:70},
+                    {name:"龙岗实验学校",y2023:70,y2024:70,y2025:75.6},
+                    {name:"新知学校",y2023:69.15,y2024:70,y2025:75.2},
+                    {name:"道远学校",y2023:89.1,y2024:91.2,y2025:70},
+                    {name:"新亚洲学校",y2023:75.45,y2024:75,y2025:90.65},
+                    {name:"平安里学校",y2023:77,y2024:88.4,y2025:93.55},
+                    {name:"兰著学校",y2023:83.45,y2024:86.2,y2025:84.2},
+                    {name:"龙岗外国语",y2023:102.1,y2024:102.8,y2025:103.55},
+                    {name:"星河学校",y2023:75,y2024:69.65,y2025:75},
+                    {name:"致美学校",y2023:69.85,y2024:75,y2025:69.45},
+                    {name:"上海外国语学校",y2023:75,y2024:75,y2025:90},
+                    {name:"天成学校",y2023:66.95,y2024:69.6,y2025:75},
+                    {name:"天誉实验学校",y2023:75.45,y2024:67.05,y2025:91.65},
+                    {name:"华南师范大运学校",y2023:75,y2024:75.6,y2025:91.05}
+                ]
+            },
+            longgang: {
+                name: "龙岗街道",
+                list: [
+                    {name:"龙岗中学",y2023:65.2,y2024:65.7,y2025:66.8},
+                    {name:"南联学校",y2023:68.35,y2024:66.7,y2025:66.45},
+                    {name:"新梓学校",y2023:66.05,y2024:68.1,y2025:70},
+                    {name:"龙园学校",y2023:68.45,y2024:68.35,y2025:69.9},
+                    {name:"仙田外国语学校",y2023:67.6,y2024:75,y2025:89.35},
+                    {name:"教科院附属创星学校",y2023:68,y2024:68.65,y2025:84.05},
+                    {name:"未来双语学校",y2023:66.15,y2024:70,y2025:70},
+                    {name:"行知学校",y2023:75,y2024:75,y2025:75},
+                    {name:"宝龙科技城实验学校",y2023:95,y2024:100.4,y2025:102.5},
+                    {name:"宝龙外国语学校",y2023:69,y2024:79.1,y2025:93},
+                    {name:"同心实验学校",y2023:85.8,y2024:86.1,y2025:89.8},
+                    {name:"同乐主力学校",y2023:65.05,y2024:66.4,y2025:67.8},
+                    {name:"龙岗中心学校",y2023:86.1,y2024:81.7,y2025:86},
+                    {name:"深高级龙岗学校",y2023:68.45,y2024:78,y2025:95.05},
+                    {name:"宝荷学校",y2023:65.15,y2024:68.65,y2025:87.25}
+                ]
+            },
+            bantian: {
+                name: "坂田街道",
+                list: [
+                    {name:"云和学校",y2023:69.05,y2024:70,y2025:70},
+                    {name:"深圳实验坂田校区",y2023:103.15,y2024:104.3,y2025:104.95},
+                    {name:"深圳大学附属坂田学校",y2023:68.7,y2024:70, y2025:75},
+                    {name:"科技城外国语",y2023:101.65,y2024:101.7,y2025:104},
+                    {name:"坂田实验",y2023:67.75,y2024:68,y2025:70},
+                    {name:"五和实验学校",y2023:69.55,y2024:64.9,y2025:70},
+                    {name:"扬美实验",y2023:65.6,y2024:66.5,y2025:67.05},
+                    {name:"广东实验深圳学校",y2023:88.7,y2024:92.25,y2025:98.6},
+                    {name:"云端学校",y2023:91.75,y2024:91.75,y2025:91.75}
+                ]
+            },
+            henggang: {
+                name: "横岗园山街道",
+                list: [
+                    {name:"横岗中学",y2023:68.3,y2024:70.5,y2025:75},
+                    {name:"六约学校",y2023:69.35,y2024:68.2,y2025:68.1},
+                    {name:"横岗中心学校",y2023:66.9,y2024:68.6,y2025:68.6},
+                    {name:"梧桐学校",y2023:85.35,y2024:88.6,y2025:100},
+                    {name:"横岗外国语",y2023:65.95,y2024:67.95,y2025:68},
+                    {name:"园山实验",y2023:66.9,y2024:69,y2025:69.25},
+                    {name:"北理莫斯科园山学校原保安学校",y2023:67.7,y2024:69.3,y2025:84.15},
+                    {name:"盛义九年一贯制学校",y2023:68.5,y2024:68.5,y2025:68.5}
+                ]
+            },
+            pinghu: {
+                name: "平湖街道",
+                list: [
+                    {name:"平湖中学",y2023:65.25,y2024:66.2,y2025:67.05},
+                    {name:"信德学校",y2023:84.3,y2024:81.05,y2025:84.3},
+                    {name:"平湖中心学校",y2023:63.6,y2024:67.6,y2025:68.5},
+                    {name:"华南师范平湖学校",y2023:63.6,y2024:64.08,y2025:64.8},
+                    {name:"平湖外国语学校",y2023:64.65,y2024:65.85,y2025:67.4},
+                    {name:"崇真学校",y2023:64,y2024:70,y2025:70},
+                    {name:"平湖第二实验",y2023:64.6,y2024:68.9,y2025:68.9},
+                    {name:"深圳外国语龙岗学校",y2023:103.15,y2024:97.75,y2025:97.75}
+                ]
+            },
+            buji: {
+                name: "布吉吉华街道",
+                list: [
+                    {name:"布吉中学",y2023:67.15,y2024:67,y2025:67.5},
+                    {name:"贤义外国语学校",y2023:104.55,y2024:105.9,y2025:107},
+                    {name:"可园学校",y2023:90,y2024:100.2,y2025:103.55},
+                    {name:"木棉湾学校",y2023:83.95,y2024:85.3,y2025:95},
+                    {name:"文理学校",y2023:90.5,y2024:94.05,y2025:94.1},
+                    {name:"龙岭公班",y2023:107.65,y2024:91.1,y2025:109.35},
+                    {name:"怡翠实验学校",y2023:104.4,y2024:101,y2025:104.25},
+                    {name:"甘李学校",y2023:66.9,y2024:67.4,y2025:67.45},
+                    {name:"吉华实验学校",y2023:68.85,y2024:85,y2025:89.3}
+                ]
+            }
         };
-        const streetNameMap = {
-            longcheng:"龙城街道",
-            longgang:"龙岗街道",
-            bantian:"坂田街道",
-            henggang:"横岗园山街道",
-            pinghu:"平湖街道",
-            buji:"布吉吉华街道"
-        }
 
         let trendChartIns = null;
         let yearCompareChartIns = null;
@@ -211,8 +221,9 @@
         // 刷新整套页面数据（表格+指标+双图表）
         function refreshAllData(){
             const selectVal = document.getElementById('streetSelect').value;
-            const currData = streetAllData[selectVal];
-            const currStreetName = streetNameMap[selectVal];
+            const currStreetInfo = streetAllData[selectVal];
+            const currData = currStreetInfo.list;
+            const currStreetName = currStreetInfo.name;
             document.getElementById('tableTitle').innerText = `${currStreetName}初中2023-2025录取积分明细`;
 
             // 1. 渲染表格
@@ -220,7 +231,7 @@
             // 2. 计算顶部统计指标
             calcStatCard(currData);
             // 3. 重绘两张图表
-            renderTrendChart(currData);
+            renderTrendChart(selectVal);
             renderYearCompareChart(currData);
         }
 
@@ -260,33 +271,33 @@
             document.getElementById('schoolTotal').innerText = schoolCount;
 
             // 提取2025所有分数
-            const score2025 = dataList.map(s=>s.y2025);
-            const sum2025 = score2025.reduce((a,b)=>a+b,0);
+            const score2025Arr = dataList.map(s=> ({name:s.name, score:s.y2025}));
+            const onlyScore = score2025Arr.map(item => item.score);
+            const sum2025 = onlyScore.reduce((a,b)=>a+b,0);
             const avg2025 = (sum2025 / schoolCount).toFixed(2);
-            const max2025 = Math.max(...score2025).toFixed(2);
             document.getElementById('avgScore').innerText = avg2025;
-            document.getElementById('maxScore').innerText = max2025;
 
-            // 找涨幅最大学校
-            let maxUpNum = -999;
-            let maxUpName = '';
-            dataList.forEach(item=>{
-                const diff = item.y2025 - item.y2023;
-                if(diff > maxUpNum){
-                    maxUpNum = diff;
-                    maxUpName = item.name;
-                }
-            })
-            document.getElementById('maxUp').innerText = `${maxUpName} +${maxUpNum}分`;
+            // 查找最高分+对应学校、最低分+对应学校
+            let maxItem = score2025Arr[0];
+            let minItem = score2025Arr[0];
+            score2025Arr.forEach(item => {
+                if(item.score > maxItem.score) maxItem = item;
+                if(item.score < minItem.score) minItem = item;
+            });
+            document.getElementById('maxScoreText').innerText = `${maxItem.score}分 | ${maxItem.name}`;
+            document.getElementById('minScoreText').innerText = `${minItem.score}分 | ${minItem.name}`;
         }
 
-        // 各校三年积分折线图
-        function renderTrendChart(dataList){
+        // 各校三年积分折线图（移除街道分组tooltip逻辑）
+        function renderTrendChart(currentStreetKey){
             const dom = document.getElementById('trendChart');
             if(trendChartIns) trendChartIns.dispose();
             trendChartIns = echarts.init(dom);
             const xAxis = ['2023','2024','2025'];
-            const series = dataList.map(school=>{
+            const currentStreetObj = streetAllData[currentStreetKey];
+            const schoolList = currentStreetObj.list;
+
+            const series = schoolList.map(school=>{
                 return {
                     name: school.name,
                     type: 'line',
@@ -295,12 +306,32 @@
                     symbolSize: 3
                 }
             })
+
             const option = {
-                tooltip: {trigger: 'axis'},
-                legend: {type: 'scroll', left: 0, bottom: 0, height: 80},
-                grid: {left: '3%', right: '4%', bottom: '18%', containLabel: true},
-                xAxis: {type: 'category', data: xAxis},
-                yAxis: {type: 'value', name: '录取积分', min: 60},
+                tooltip: {
+                    trigger: 'axis'
+                },
+                legend: {
+                    type: 'scroll',
+                    left: 0,
+                    bottom: 0,
+                    height: 80
+                },
+                grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '18%',
+                    containLabel: true
+                },
+                xAxis: {
+                    type: 'category',
+                    data: xAxis
+                },
+                yAxis: {
+                    type: 'value',
+                    name: '录取积分',
+                    min: 60
+                },
                 series: series
             }
             trendChartIns.setOption(option);
